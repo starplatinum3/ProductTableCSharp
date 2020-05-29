@@ -7,7 +7,12 @@ Vue前端 + C# WebAPI + MySql
 2. 后端选择C# 的WebAPI。
 3. 数据库为MySql。
 
-## :memo: 安装教程
+## :memo: 安装步骤
+1. 安装MySql，创建数据库fastlink，并导入Attachment\fastlink.sql，初始化表和数据
+2. 下载zip并找到ContactPersonAPI文件夹下的ContactPersonAPI.csproj，用VS2019 打开
+3. 按F5从VS2019 启动webAPI，会打开浏览器https://localhost:44384/swagger，可以看到可被调用的接口
+4. 打开ContactPersonVue文件夹下的index.html，就可以使用 联系人管理页面。
+## :apple: 开发步骤
 ### 1. 搭建前端
 #### 1.1 创建静态的vue页面
 预览界面
