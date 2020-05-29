@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title></title>
+		<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/underscore.js"></script>
+		<script type="text/javascript" src="https://unpkg.com/axios/dist/axios.min.js"></script>
+		<script src="https://cdn.bootcdn.net/ajax/libs/qs/6.9.3/qs.min.js"></script>
+	</head>
+	<body>
+		<div id="demo">
+			<!-- navigation bar -->
+			<nav class="navbar navbar-inverse">
+				<div class="container-fluid">
+					<div class="navbar-brand">Vue 2.0 联系人单页应用</div>
+				</div>
+			</nav>
+
+			<!-- 主页面 -->
+			<div class="container" id="content">
+				<div>
+					<h4><b>联系人</b></h4>
+				</div>
+				<table class="table table-bordered table-hover">
+					<thead>
+						<tr>
+							<td>序号</td>
+							<td>姓名</td>
+							<td>出生年月</td>
+							<td>电话号码</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr v-for="item in list" :key="item.Id" v-on:click="showrow(item)">
+							<td>{{item.Id}}</td>
+							<td>{{item.Name}}</td>
+							<td>{{item.Birthday}}</td>
+							<td>{{item.Telephone}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<!-- 添加修改页面  -->
+			<div id="editform" class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">编辑</h3>
+				</div>
+				<div class="panel-body">
+					<form class="form-horizontal" role="form" v-on:submit.prevent>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">姓名</label>
+							<div class="col-sm-10">
+								<input class="form-control" v-model="row.Name" id="name" placeholder="输入姓名" v-bind:readonly="!isNew">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">出生日期</label>
+							<div class="col-sm-10">
+								<input type="date" class="form-control" v-model="row.Birthday" id="birthday">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">电话号码</label>
+							<div class="col-sm-10">
+								<input class="form-control" v-model="row.Telephone" id="phone">
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-offset-2 col-sm-10">
+								<button @click="newrow" class="btn btn-primary">新增</button>
+								<button @click="saverow" class="btn btn-primary">保存</button>
+								<button @click="deleterow" class="btn btn-danger">删除</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+
+		</div>
+		<script type="text/javascript">
+			Vue.use({
+				install(Vue) {
+					Object.defineProperty(Vue.prototype, "$qs", {
+						writable: false,
+						value: window.Qs
+					});
+				}
+			});
+
+			var demo = new Vue({
+				// 在ID为"demo"的DIV标签内部运行
+				el: '#demo',
+				// 数据集合
+				data: {
+					isNew: false,
+					row: {
+						Id: 0,
+						Name: "",
+						Birthday: "2020-01-01",
+						Telephone: ""
+					},
+					list: [{
+							Id: 5,
+							Name: "user2",
+							Birthday: "2020-01-01",
+							Telephone: "18932180745"
+						},
+						{
+							Id: 6,
+							Name: "user3",
+							Birthday: "2020-01-01",
+							Telephone: "18932180745"
+						}
+					]
+				},
+
+				mounted() {
+					axios
+						.get('https://localhost:44384/api/Peoples')
+						.then(response => (
+							this.list = response.data
+						))
+						.catch(error => {
+							// 请求失败属
+							console.log(error)
+						})
+				},
+				// 此处声明函数方法
+				methods: {
+					showrow: function(value) {
+						//this.row = value
+						// 此处可以理解为浅拷贝，是行数据的copy
+						// 浪费，先转成json字符串，再转成类
+						this.row = JSON.parse(JSON.stringify(value))
+					},
+					newrow: function() {
+						// row 就是临时存储的中转库，是绑定页面的类
+						this.row = {
+							Id: 0,
+							Name: '',
+							Birthday: '',
+							Telephone: ''
+						}
+						this.isNew = true;
+					},
+					saverow: function() {
+						this.isNew = false;
+						if (this.row.Name == "") {
+							alert("用户名不可为空");
+							return;
+						}
+						if (this.row.Birthday == "") {
+							alert("生日列不允许输入空值");
+							return;
+						}
+						//判断是新建还是修改
+						if (this.row.Id === 0) {
+							this.row.Id = _.max(this.list, function(stooge) {
+								return stooge.Id;
+							}).Id + 1
+							this.isNew = true;
+						}
+						let postData = {
+							Id: this.row.Id,
+							Name: this.row.Name,
+							Birthday: this.row.Birthday,
+							Telephone: this.row.Telephone
+						};
+						if (this.isNew) {
+							axios.post('https://localhost:44384/api/Peoples', this.$qs.stringify(postData))
+								.then(
+									response => (
+										//this.list = response.data
+										console.log("success")
+									))
+								.catch(error => {
+									// 请求失败
+									console.log(error)
+								})
+							this.list.push(JSON.parse(JSON.stringify(this.row)))
+						} else {
+							axios.put('https://localhost:44384/api/Peoples/' + this.row.Name, this.$qs.stringify(postData))
+								.then(
+									response => (
+										//this.list = response.data
+										console.log("success")
+									))
+								.catch(error => {
+									// 请求失败
+									console.log(error)
+								})
+							Object.assign(this.list.find(x => x.Id === this.row.Id), this.row)
+						}
+					},
+					deleterow: function() {
+						if (this.row.Id != 0) {
+							var index = _.findIndex(this.list, {
+								Id: this.row.Id
+							});
+							axios.delete('https://localhost:44384/api/Peoples/' + this.row.Name)
+								.then(
+									response => (
+										//this.list = response.data
+										console.log("success")
+									))
+								.catch(error => {
+									// 请求失败
+									console.log(error)
+								})
+							this.list.splice(index, 1);
+						}
+						this.newrow();
+					}
+
+					//_.max和_.findIndex是Underscore库中的函数，
+					// js原生函数对于Array的操作稍嫌复杂。
+				}
+			})
+		</script>
+	</body>
+</html>
