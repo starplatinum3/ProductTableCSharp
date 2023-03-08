@@ -3,3 +3,7 @@
 ################################################################################
 
 /ContactPersonAPI/bin/roslyn/VBCSCompiler.exe
+
+bin
+obj
+packages

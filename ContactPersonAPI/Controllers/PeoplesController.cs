@@ -10,7 +10,10 @@ namespace Peoples.Controllers
     {
         private MySqlConnection GetConnection()
         {
-            string connectString = "data source=127.0.0.1;database=fastlink;user id=root;password=admin;pooling=false;charset=utf8";//pooling代表是否使用连接池
+            string connectString = "data source=127.0.0.1;database=fastlink;user id=root;password=123456;pooling=false;charset=utf8";//pooling代表是否使用连接池
+            //string connectString = "data source=127.0.0.1;database=test;user id=root;password=123456;pooling=false;charset=utf8";//pooling代表是否使用连接池
+
+            //string connectString = "data source=127.0.0.1;database=fastlink;user id=root;password=admin;pooling=false;charset=utf8";//pooling代表是否使用连接池
             MySqlConnection conn = new MySqlConnection(connectString);
             conn.Open();
             return conn;

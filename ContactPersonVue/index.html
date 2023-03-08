@@ -75,6 +75,7 @@
 								<button @click="newrow" class="btn btn-primary">新增</button>
 								<button @click="saverow" class="btn btn-primary">保存</button>
 								<button @click="deleterow" class="btn btn-danger">删除</button>
+								<button @click="productGet" class="btn btn-primary">productGet</button>
 							</div>
 						</div>
 					</form>
@@ -98,6 +99,7 @@
 				// 数据集合
 				data: {
 					isNew: false,
+					baseUrl: "https://localhost:44384/api",
 					row: {
 						Id: 0,
 						Name: "",
@@ -129,9 +131,45 @@
 							// 请求失败属
 							console.log(error)
 						})
+
+						axios
+						.get(`${this.baseUrl}/product`)
+						.then(response => {
+							console.log("product response");
+							console.log(response);
+
+							this.list = response.data
+						}
+						
+						)
+						.catch(error => {
+							// 请求失败属
+							console.log(error)
+						})
 				},
 				// 此处声明函数方法
 				methods: {
+					productGet(){
+						console.log("productGet");
+						// console.log("productGet");
+						console.log("axios");
+						console.log(axios);
+
+						axios
+						.get(`${this.baseUrl}/product`)
+						.then(response => {
+							console.log("product response");
+							console.log(response);
+
+							this.list = response.data
+						}
+						
+						)
+						.catch(error => {
+							// 请求失败属
+							console.log(error)
+						})
+					},
 					showrow: function(value) {
 						//this.row = value
 						// 此处可以理解为浅拷贝，是行数据的copy
