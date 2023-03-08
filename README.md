@@ -1,11 +1,14 @@
-# ContactPerson
-## :art: 介绍
-联系人管理
+product table
+
+主要代码  这个是后端
+D:\proj\cSharp\VueCShapeWebAPIDemo\ContactPersonAPI\Controllers\ProductController.cs
+starplatinum3/ProductTableCSharp
+https://github.com/starplatinum3/ProductTableCSharp
+
 ## :rocket: 软件架构
-Vue前端 + C# WebAPI + MySql
-1. 前端选择单网页Vue，没有借助脚手架。
-2. 后端选择C# 的WebAPI。
-3. 数据库为MySql。
+C# WebAPI + MySql vue3 ts vite
+后端选择C# 的WebAPI。
+ 数据库为MySql。
 
 ## :memo: 安装步骤
 1. 安装MySql，创建数据库fastlink，并导入Attachment\fastlink.sql，初始化表和数据
