@@ -7,6 +7,11 @@ Vue前端 + C# WebAPI + MySql
 2. 后端选择C# 的WebAPI。
 3. 数据库为MySql。
 
+
+git remote add origin https://gitee.com/starplatinum111/product-table-csharp.git
+
+git remote add gitee https://gitee.com/starplatinum111/product-table-csharp.git
+
 ## :memo: 安装步骤
 1. 安装MySql，创建数据库fastlink，并导入Attachment\fastlink.sql，初始化表和数据
 2. 下载zip并找到ContactPersonAPI文件夹下的ContactPersonAPI.csproj，用VS2019 打开
